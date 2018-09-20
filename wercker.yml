@@ -53,7 +53,7 @@ push-operator-image:
         echo ${MYSQL_AGENT_IMAGE}
 
     - internal/docker-run:
-      image: $MYSQL_AGENT_IMAGE
+      image: mysql/mysql-server:8.0.12
       name: temp-mysql-agent
 
     - script:
