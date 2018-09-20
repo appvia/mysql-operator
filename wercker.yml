@@ -36,7 +36,6 @@ build:
         cp -R docker ${WERCKER_OUTPUT_DIR}/
 
 push-operator-image:
-  base-path: "/go/src/github.com/oracle/mysql-operator"
   steps:
     - script:
       name: test
