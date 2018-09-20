@@ -38,6 +38,12 @@ build:
 push-operator-image:
   base-path: "/go/src/github.com/oracle/mysql-operator"
   steps:
+    - script:
+      name: test
+      code: |
+        ls -lah
+        ls -lah ${WERCKER_ROOT}
+
     - internal/docker-build:
       dockerfile: docker/mysql-agent/Dockerfile
       image-name: wercker-build-mysql-agent
