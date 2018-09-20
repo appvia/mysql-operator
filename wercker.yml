@@ -41,4 +41,4 @@ push-operator-image:
     - internal/docker-build:
       dockerfile: docker/mysql-agent/Dockerfile
       image-name: wercker-build-mysql-agent
-      build-args: MYSQL_USER=27
+      build-args: "MYSQL_USER=27"
