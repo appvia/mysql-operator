@@ -35,6 +35,7 @@ build:
         cp -R hack ${WERCKER_OUTPUT_DIR}/
         cp -R mysql-operator ${WERCKER_OUTPUT_DIR}/
         cp -R .git ${WERCKER_OUTPUT_DIR}/
+        cp -R docker ${WERCKER_OUTPUT_DIR}/
 
 push-operator-image:
   base-path: "/go/src/github.com/oracle/mysql-operator"
@@ -48,13 +49,11 @@ push-operator-image:
       name: Get mysql-agent image source
       code: |
         ls -lah
-        ls -lah ${WERCKER_OUTPUT_DIR}
-        ls -lah docker/mysql-agent/
         export MYSQL_AGENT_IMAGE=$(sed -n 's/^FROM \(.*\)/\1/p' docker/mysql-agent/Dockerfile)
         echo ${MYSQL_AGENT_IMAGE}
 
     - internal/docker-run:
-      image: ${MYSQL_AGENT_IMAGE}
+      image: $MYSQL_AGENT_IMAGE
       name: temp-mysql-agent
 
     - script:
@@ -67,4 +66,4 @@ push-operator-image:
     - internal/docker-build:
       dockerfile: docker/mysql-agent/Dockerfile
       image-name: wercker-build-mysql-agent
-      build-args: MYSQL_USER=${MYSQL_UID}
+      build-args: MYSQL_USER=$MYSQL_UID
