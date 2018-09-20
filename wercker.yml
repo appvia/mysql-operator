@@ -19,9 +19,7 @@ build:
     - script:
       name: copy build artifacts
       code: |
-        mkdir -p ${WERCKER_OUTPUT_DIR}/bin
-        cp -R /go/bin/mysql-agent ${WERCKER_OUTPUT_DIR}/bin/
-        cp -R /go/bin/mysql-operator ${WERCKER_OUTPUT_DIR}/bin/
+        cp -R bin ${WERCKER_OUTPUT_DIR}/
         cp -R dist ${WERCKER_OUTPUT_DIR}/
 
     - script:
@@ -39,31 +37,8 @@ build:
 
 push-operator-image:
   base-path: "/go/src/github.com/oracle/mysql-operator"
-  box: alpine
   steps:
-    - script:
-      name: Install build utils
-      code: apk --no-cache add docker
-
-    - script:
-      name: Get mysql-agent image source
-      code: |
-        ls -lah
-        export MYSQL_AGENT_IMAGE=$(sed -n 's/^FROM \(.*\)/\1/p' docker/mysql-agent/Dockerfile)
-        echo ${MYSQL_AGENT_IMAGE}
-
-    - internal/docker-run:
-      image: mysql/mysql-server:8.0.12
-      name: temp-mysql-agent
-
-    - script:
-      name: extract mysql UID
-      code: export MYSQL_UID=$(docker exec -it temp-mysql-agent id -u mysql)
-
-    - internal/docker-kill:
-      name: temp-mysql-agent
-
     - internal/docker-build:
       dockerfile: docker/mysql-agent/Dockerfile
       image-name: wercker-build-mysql-agent
-      build-args: MYSQL_USER=$MYSQL_UID
+      build-args: MYSQL_USER=27
